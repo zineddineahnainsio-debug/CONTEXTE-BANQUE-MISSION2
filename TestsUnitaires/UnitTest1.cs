@@ -1,4 +1,3 @@
-
 using libCptBqTU;
 using System.Reflection;
 
@@ -11,7 +10,7 @@ namespace TestsUnitaires
         public void ClasseCompteExiste()
         {
             //Arranger
-            Type compteType = typeof(Compte);
+            System.Type compteType = typeof(Compte);
             //Auditer
             Assert.IsNotNull(compteType, "La classe Compte n'existe pas.");
         }
@@ -19,8 +18,8 @@ namespace TestsUnitaires
         public void ConstructeurCompteExiste()
         {
             // Arranger
-            Type compteType = typeof(Compte);
-            Type[] parametersTypes = new Type[] { typeof(int), typeof(string), typeof(decimal), typeof(decimal) };
+            System.Type compteType = typeof(Compte);
+            System.Type[] parametersTypes = new System.Type[] { typeof(int), typeof(string), typeof(decimal), typeof(decimal) };
 
             // Agir
             ConstructorInfo constructeur = compteType.GetConstructor(parametersTypes);
@@ -247,6 +246,54 @@ namespace TestsUnitaires
             // Assert
             Assert.IsTrue(resultat, "Le compte1 avec un solde de 0 devrait être supérieur au compte2 avec un solde négatif");
         }
+        [TestMethod]
+        public void RendCompteTest()
+        {
+            // Arrange
+            Compte compte1 = new Compte(1, "Compte1", 0m, 500m);
+            Compte compte2 = new Compte(2, "Compte2", -100m, 500m);
+            Banque b = new Banque();
+            b.AjouterCompte(compte1);
+            b.AjouterCompte(compte2);
 
+
+            // Agir
+            Compte resultat = b.RendCompte(2);
+
+            // Assert
+            Assert.AreEqual(resultat,compte2);
+        }
+        [TestMethod]
+        public void GetTypeTest()
+        {
+            // Arrange
+            Tipe type = new Tipe("vir", "virement sur compte", '+');
+            Tipe type1 = new Tipe("ret", "retrait guichet ", '-');
+            Banque b = new Banque();
+            b.AjouterType(type);
+            b.AjouterType(type1);
+
+
+            // Agir
+            Tipe resultat = b.GetType("ret");
+
+            // Assert
+            Assert.AreEqual(resultat, type1);
+        }
+        [TestMethod]
+        public void mesMouvementsTest()
+        {
+            // Arrange
+            Compte c = new Compte(45657, "titi", 2000, -1000);
+            Tipe type = new Tipe("vir", "virement sur compte", '+');
+            c.AjouterMouvement(200, new DateTime(2017, 09, 11), type);
+
+
+            // Agir
+            
+
+            // Assert
+            Assert.AreEqual(resultat, type1);
+        }
     }
 }

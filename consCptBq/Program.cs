@@ -1,18 +1,12 @@
 ﻿using System.Numerics;
 using libCptBqTU;
-Compte c1 = new Compte(12345, "toto", 1000, -500);
-Compte c2 = new Compte(45657, "titi", 2000, -1000);
-c1.Transferer(3300, c2);
-
-if (c1.Superieur(c2))
-{ Console.WriteLine("supérieur"); }
-else
-{
-    Console.WriteLine("inférieur");
-    Console.WriteLine(c2.ToString());
-}
-
-c1.Crediter(2000);
-c1.Debiter(5300);
-
-
+Compte c = new Compte(45657, "titi", 2000, -1000); 
+Banque b = new Banque();
+b.AjouterCompte(c);
+c = b.RendCompte(45657);
+b.AjouterType("vir", "virement sur compte", '+');
+b.AjouterType("ret", "retrait guichet ", '-');
+c.AjouterMouvement(200, new DateTime(2017, 09, 11), b.GetType("vir"));
+c.AjouterMouvement(100, new DateTime(2017, 09, 12), b.GetType("ret"));
+c.AjouterMouvement(500, new DateTime(2017, 09, 13), b.GetType("vir"));
+Console.WriteLine(c.ToString());

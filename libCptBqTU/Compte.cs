@@ -1,4 +1,5 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Collections;
+using System.Reflection.Metadata;
 
 namespace libCptBqTU
 {
@@ -11,7 +12,7 @@ namespace libCptBqTU
         public string Nom { get; set; }
         public decimal Solde { get; set; }
         public decimal DecouvertAutorise { get; set; }
-
+        public ArrayList mesMouvements { get; set; }
 
         /// <summary>
         /// Constructeur à 4 arguments
@@ -26,6 +27,7 @@ namespace libCptBqTU
             this.Nom = nom;
             this.Solde = solde;
             this.DecouvertAutorise = decouvertAutorise;
+            this.mesMouvements = new ArrayList();
   
         }
         /// <summary>
@@ -41,7 +43,13 @@ namespace libCptBqTU
         /// <returns></returns>
         public string ToString()
         {
-            return $"Numero:{this.Numero},Nom:{this.Nom},Solde:{this.Solde},Decouvert Autorisé:{this.DecouvertAutorise}";
+            string mvts = "";
+            string main = $"Numero:{this.Numero},Nom:{this.Nom},Solde:{this.Solde},Decouvert Autorisé:{this.DecouvertAutorise}\n";
+            foreach (Mouvement m in mesMouvements)
+            {
+                mvts += m.ToString()+"\n";
+            }
+            return main + mvts;
         }
 
         /// <summary>
@@ -88,6 +96,14 @@ namespace libCptBqTU
         public bool Superieur(Compte compte)
         {
             return this.Solde>compte.Solde;
+        }
+        public void AjouterMouvement(Mouvement mvt)
+        {
+            mesMouvements.Add(mvt);
+        }
+        public void AjouterMouvement(double mont,DateTime date,Tipe type)
+        {
+            mesMouvements.Add(new Mouvement(mont,date,type));
         }
     }
 }
