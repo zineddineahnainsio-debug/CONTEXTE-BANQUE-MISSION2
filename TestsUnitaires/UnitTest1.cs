@@ -1,4 +1,5 @@
 using libCptBqTU;
+using System.Collections;
 using System.Reflection;
 
 namespace TestsUnitaires
@@ -261,7 +262,7 @@ namespace TestsUnitaires
             Compte resultat = b.RendCompte(2);
 
             // Assert
-            Assert.AreEqual(resultat,compte2);
+            Assert.AreEqual(compte2, resultat);
         }
         [TestMethod]
         public void GetTypeTest()
@@ -278,22 +279,25 @@ namespace TestsUnitaires
             Tipe resultat = b.GetType("ret");
 
             // Assert
-            Assert.AreEqual(resultat, type1);
+            Assert.AreEqual(type1, resultat);
         }
         [TestMethod]
         public void mesMouvementsTest()
         {
             // Arrange
-            Compte c = new Compte(45657, "titi", 2000, -1000);
+            Compte compte = new Compte(45657, "titi", 2000, -1000);
             Tipe type = new Tipe("vir", "virement sur compte", '+');
-            c.AjouterMouvement(200, new DateTime(2017, 09, 11), type);
+            compte.AjouterMouvement(200, new DateTime(2017, 09, 11), type);
 
+            //Agir
+            ArrayList resultat = compte.mesMouvements;
 
-            // Agir
+            //Assert
+            Assert.AreEqual("montant: 200   date:11/09/2017   code:vir", resultat[0].ToString());
+        }
             
 
-            // Assert
-            Assert.AreEqual(resultat, type1);
-        }
+
     }
 }
+
