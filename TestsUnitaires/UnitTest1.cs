@@ -1,6 +1,7 @@
 using libCptBqTU;
 using System.Collections;
 using System.Reflection;
+using System.Threading.Channels;
 
 namespace TestsUnitaires
 {
@@ -126,6 +127,56 @@ namespace TestsUnitaires
             Assert.AreEqual(soldeAttendu, compte.Solde, "Le solde ne devrait pas changer lors d'un crédit de zéro");
         }
         [TestMethod]
+        public void Debiter_MontantPositif()
+        {
+            // Arranger
+            Compte compte = new Compte(1, "Test", 1000m, 500m);
+            decimal montantDebit = 300m;
+            decimal soldeAttendu = 700m;
+
+            // Agir
+            compte.Debiter(montantDebit);
+
+            // Assert
+            Assert.AreEqual(soldeAttendu, compte.Solde, "Le solde n'a pas été correctement débité");
+        }
+        public void Debiter_MontantNegatif()
+        {
+            // Arranger
+            Compte compte = new Compte(1, "Test", 1000m, 500m);
+            decimal montantDebit = 300m;
+            decimal soldeInitial = 1000m;
+
+            // Agir
+            compte.Debiter(montantDebit);
+            // Assert
+            Assert.AreEqual(soldeInitial, compte.Solde, "Le solde ne devrait pas changer lors d'un débit négatif");
+        }
+        public void Debiter_MontantSupAuSoldeAutorisé()
+        {
+            // Arranger
+            Compte compte = new Compte(1, "Test", 1000m, 500m);
+            decimal montantDebit = 700m;
+            decimal soldeInitial = 1000m;
+
+            // Agir
+            compte.Debiter(montantDebit);
+            // Assert
+            Assert.AreEqual(soldeInitial, compte.Solde, "Le montant est supérieur au solde autorisé");
+        }
+        public void Debiter_MontantEgaleAuSoldeAutorisé()
+        {
+            // Arranger
+            Compte compte = new Compte(1, "Test", 1000m, 500m);
+            decimal montantDebit = 500m;
+            decimal soldeInitial = 1000m;
+
+            // Agir
+            compte.Debiter(montantDebit);
+            // Assert
+            Assert.AreEqual(soldeInitial, compte.Solde, "Le montant est égal au solde autorisé");
+        }
+        [TestMethod]
         public void Transferer_MontantValideEntreSoldesSuffisants_TransfertReussiTested()
         {
             // Arranger
@@ -246,6 +297,23 @@ namespace TestsUnitaires
 
             // Assert
             Assert.IsTrue(resultat, "Le compte1 avec un solde de 0 devrait être supérieur au compte2 avec un solde négatif");
+        }
+        [TestMethod]
+        public void AjouterCompteTest()
+        {
+            // Arrange
+            Compte compte1 = new Compte(1, "Compte1", 0m, 500m);
+            Compte compte2 = new Compte(2, "Compte2", -100m, 500m);
+            Banque b = new Banque();
+            b.AjouterCompte(compte1);
+            b.AjouterCompte(compte2);
+
+
+            // Agir
+            Compte resultat = b.RendCompte(2);
+
+            // Assert
+            Assert.AreEqual(compte2, resultat);
         }
         [TestMethod]
         public void RendCompteTest()

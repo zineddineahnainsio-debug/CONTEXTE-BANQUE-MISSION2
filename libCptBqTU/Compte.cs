@@ -69,8 +69,15 @@ namespace libCptBqTU
         /// <returns>True si le débit a été effectué, False sinon</returns>
         public bool Debiter(decimal montant)
         {
-            this.Solde -= montant;
-            return true;
+            if (montant < this.DecouvertAutorise)
+            {
+                this.Solde -= montant;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 
@@ -82,9 +89,16 @@ namespace libCptBqTU
         /// <returns></returns>
         public bool Transferer(decimal montant,Compte compte)
         {
-            this.Solde -= montant;
-            compte.Solde += montant;
-            return true;
+            if (montant < this.DecouvertAutorise)
+            {
+                this.Solde -= montant;
+                compte.Solde += montant;
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 
